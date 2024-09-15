@@ -73,21 +73,21 @@ int CheckHit() {
 	double theta;
 
 	// äpìxÇãÅÇﬂÇÈ
-	theta = -atan2(LineLY - LineRY, LineLX - LineRX);
+	theta = atan2(LineLY - LineRY, LineLX - LineRX);
 	// Ç∏ÇÁÇ∑í∑Ç≥ÇãÅÇﬂÇÈ
 	DivX = LineRX - ((LineRX - LineLX) / 2);
 	DivY = LineRY - ((LineRY - LineLY) / 2);
 
 	// ç¿ïWÇâÒì]çsóÒÇ…ÇÊÇ¡ÇƒâÒì]Ç≥ÇπÇÈ
 	{
-		RotaX = (cos(theta) * (MouseX - DivX)) - (sin(theta) * (MouseY - DivY));
-		RotaY = (sin(theta) * (MouseX - DivX)) + (cos(theta) * (MouseY - DivY));
+		RotaX = (cos(theta) * (MouseX - DivX)) + (sin(theta) * (MouseY - DivY));
+		RotaY = -(sin(theta) * (MouseX - DivX)) + (cos(theta) * (MouseY - DivY));
 
-		RotaLineLX = (cos(theta) * (LineLX - DivX)) - (sin(theta) * (LineLY - DivY));
-		RotaLineLY = (sin(theta) * (LineLX - DivX)) + (cos(theta) * (LineLY - DivY));
+		RotaLineLX = (cos(theta) * (LineLX - DivX)) + (sin(theta) * (LineLY - DivY));
+		RotaLineLY = -(sin(theta) * (LineLX - DivX)) + (cos(theta) * (LineLY - DivY));
 
-		RotaLineRX = (cos(theta) * (LineRX - DivX)) - (sin(theta) * (LineRY - DivY));
-		RotaLineRY = (sin(theta) * (LineRX - DivX)) + (cos(theta) * (LineRY - DivY));
+		RotaLineRX = (cos(theta) * (LineRX - DivX)) + (sin(theta) * (LineRY - DivY));
+		RotaLineRY = -(sin(theta) * (LineRX - DivX)) + (cos(theta) * (LineRY - DivY));
 	}
 
 	// ìñÇΩÇËîªíË
