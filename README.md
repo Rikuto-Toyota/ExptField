@@ -3,3 +3,5 @@
 https://dxlib.xsrv.jp/
 
 ## source1.c    :    線と円の当たり判定
+
+## source2.c    :    STGにおける属性攻撃
