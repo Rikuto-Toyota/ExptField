@@ -389,7 +389,7 @@ int DrawCharacter() {
 int SetPlayerProperty() {
 
 	char Buf[256];
-
+	
 	GetHitKeyStateAll(Buf);
 
 	if (Buf[KEY_INPUT_1] == 1)
