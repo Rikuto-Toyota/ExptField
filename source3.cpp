@@ -15,7 +15,7 @@ DxLib
 typedef struct tagLASER {
 	int x1, y1, x2, y2;
 	int vx1, vy1, vx2, vy2;
-	int Red, Green, Blue;
+	int Cr;
 	int Thickness;
 	int vThickness;
 
@@ -25,20 +25,22 @@ typedef struct tagBULLET {
 	int x, y;
 	int vx, vy;
 	int r;
-	int Red, Green, Blue;
+	int Cr;
 }_bullet;
 
 // 関数プロトタイプ宣言
-int DrawBullet(int x, int y, int r, int Red, int Green, int Blue);
-int DrawLaser(int x1, int y1, int x2, int y2, int Red, int Green, int Blue, int Thickness);
+int DrawBullet(int x, int y, int r, int Cr);
+int DrawLaser(int x1, int y1, int x2, int y2, int Cr, int Thickness = 1);
 
 // WinMain関数
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	_laser Laser;
-	Laser = { 0, WINDOW_HEIGHT / 2, 0, WINDOW_HEIGHT / 2, -32, 0, 32, 0 , 0, 100, 100, 0, 1 };
+	Laser = { 0, WINDOW_HEIGHT / 2, 0, WINDOW_HEIGHT / 2, -32, 0, 32, 0 , 0, 0, 1 };
+	Laser.Cr = GetColor(0, 100, 100);
 	_bullet Bullet;
-	Bullet = { 0, 0, 8, 8, 16, 100, 0, 100 };
+	Bullet = { 0, 0, 8, 8, 32, 100 };
+	Bullet.Cr = GetColor(100, 0, 100);
 
 
 	// 画面モードの設定
@@ -58,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// レーザーの処理
 		{
 			// レーザーの描画
-			DrawLaser(WINDOW_WIDTH / 2 + Laser.x1, Laser.y1, WINDOW_WIDTH / 2 + Laser.x2, Laser.y2, Laser.Red, Laser.Green, Laser.Blue, Laser.Thickness);
+			DrawLaser(WINDOW_WIDTH / 2 + Laser.x1, Laser.y1, WINDOW_WIDTH / 2 + Laser.x2, Laser.y2, Laser.Cr, Laser.Thickness);
 			// レーザーを太く，長くする
 			Laser.x1 += Laser.vx1;
 			Laser.x2 += Laser.vx2;
@@ -79,7 +81,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// バレットの処理
 		{
 			// バレットの描画
-			DrawBullet(Bullet.x, Bullet.y, Bullet.r, Bullet.Red, Bullet.Green, Bullet.Blue);
+			DrawBullet(Bullet.x, Bullet.y, Bullet.r, Bullet.Cr);
 			// 移動させる
 			Bullet.x += Bullet.vx;
 			Bullet.y += Bullet.vy;
@@ -102,26 +104,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	return 0;
 }
 
-int DrawBullet(int x, int y, int r, int Red, int Green, int Blue) {
-	SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+int DrawBullet(int x, int y, int r, int Cr) {
 	
 	// メインの線を描画
-	DrawCircle(x, y, r, GetColor(Red, Green, Blue));
-	// 内側に明るい線を入れる
-	DrawCircle(x, y, r * 0.9, GetColor(Red + 100, Green + 100, Blue + 100));
+	DrawCircle(x, y, r, Cr);
+	// 内側に明るい円を入れる
+	SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+	DrawCircle(x, y, r * 0.9, GetColor(100, 100, 100));
 	DrawCircle(x, y, r * 0.8, GetColor(255, 255, 255));
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
 
 	return 0;
 }
-int DrawLaser(int x1, int y1, int x2, int y2, int Red, int Green, int Blue, int Thickness) {
-	SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+int DrawLaser(int x1, int y1, int x2, int y2, int Cr, int Thickness) {
 
-	// メインの円を描画
-	DrawLine(x1, y1, x2, y2, GetColor(Red, Green, Blue), Thickness);
-	// 内側に明るい円を入れる
-	DrawLine(x1, y1, x2, y2, GetColor(Red + 100, Green + 100, Blue + 100), Thickness*0.85);
+	// メインの線を描画
+	DrawLine(x1, y1, x2, y2, Cr, Thickness);
+	// 内側に明るい線を入れる
+	SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+	DrawLine(x1, y1, x2, y2, GetColor(100, 100, 100), Thickness*0.85);
 	DrawLine(x1, y1, x2, y2, GetColor(255, 255, 255), Thickness*0.7);
 
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);

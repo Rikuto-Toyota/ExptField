@@ -26,6 +26,7 @@ GetRainbowColor() : F‚ªŠŠ‚ç‚©‚É•Ï‰»‚·‚éƒvƒƒOƒ‰ƒ€
 int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipVertexNum);
 int GetRainbowColor(void);
 
+int DrawLaserAA(float x1, float y1, float x2, float y2, int Cr, float Thickness = 1.0);
 
 // WinMainŠÖ”
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
@@ -106,7 +107,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawFormatString(0, (WINDOW_HEIGHT * 2) / 8, GetColor(255, 255, 255), "SkipVertexNum: %d", SkipVertexNum);
 
 
-		Angle += 0.025;
+		Angle += 0.05;
 		if (Angle > 2 * PI) {
 			Angle = 0.0;
 		}
@@ -146,11 +147,13 @@ int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipV
 	for (i = 0; i < VertexNum; i++) {
 		NextVertex = i + (SkipVertexNum + 1);
 		if (NextVertex < VertexNum) {
-			DrawLineAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr);
+			//DrawLineAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr);
+			DrawLaserAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr, 4.0);
 		}
 		else {
 			NextVertex -= VertexNum;
-			DrawLineAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr);
+			//DrawLineAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr);
+			DrawLaserAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr, 4.0);
 		}
 
 	}
@@ -201,4 +204,19 @@ int GetRainbowColor() {
 	if (B < 0) B = 0;
 	i++;
 	return Cr;
+}
+
+int DrawLaserAA(float x1, float y1, float x2, float y2, int Cr, float Thickness) {
+
+
+	// ƒƒCƒ“‚Ì‰~‚ð•`‰æ
+	DrawLine(x1, y1, x2, y2, Cr, Thickness);
+	// “à‘¤‚É–¾‚é‚¢ü‚ð‚ð“ü‚ê‚é
+	SetDrawBlendMode(DX_BLENDMODE_ADD, 255);
+	DrawLineAA(x1, y1, x2, y2, GetColor(100, 100, 100), Thickness * 0.85);
+	DrawLineAA(x1, y1, x2, y2, GetColor(255, 255, 255), Thickness * 0.7);
+
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);
+
+	return 0;
 }
