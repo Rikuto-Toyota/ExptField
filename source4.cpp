@@ -18,9 +18,9 @@ GetRainbowColor() : 色が滑らかに変化するプログラム
 #define CENTER_Y 480/2	// ウィンドウの中心y座標
 #define PI 3.141592653	// 円周率
 #define MIN_VERTEX_NUM 3	// 正n角形の最低頂点数
-#define MAX_VERTEX_NUM 16	// 正n角形の最大頂点数
+#define MAX_VERTEX_NUM 32	// 正n角形の最大頂点数
 #define MIN_SKIP_VERTEX_NUM 0	// 星型正n角形k点飛ばしの最小飛ばし数
-#define MAX_SKIP_VERTEX_NUM 7	// 星型正n角形k点飛ばしの最大飛ばし数
+#define MAX_SKIP_VERTEX_NUM 16	// 星型正n角形k点飛ばしの最大飛ばし数
 
 // 関数プロトタイプ宣言
 int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipVertexNum);
@@ -35,7 +35,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	int VertexNum;
 	int SkipVertexNum;
 	int r;
-	double Angle;
+	float Angle;
 
 	// キー入力関係
 	char KeyBuf[256];
@@ -44,8 +44,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	// スター初期値設定
 	VertexNum = 6;
 	SkipVertexNum = 0;
-	r = 128;
-	Angle = -PI / 2;
+	r = 200;
+	Angle = -PI / 2.0f;
 
 	// 画面モードの設定
 	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 16);
@@ -107,7 +107,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		DrawFormatString(0, (WINDOW_HEIGHT * 2) / 8, GetColor(255, 255, 255), "SkipVertexNum: %d", SkipVertexNum);
 
 
-		Angle += 0.05;
+		Angle += 0.025;
 		if (Angle > 2 * PI) {
 			Angle = 0.0;
 		}
@@ -138,8 +138,8 @@ int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipV
 	
 	// 正n角形の頂点座標を取得
 	for (i = 0; i < VertexNum; i++) {
-		VertexX[i] = CENTER_X + (r * cos(Angle));
-		VertexY[i] = CENTER_Y + (r * sin(Angle));
+		VertexX[i] = x + (r * cos(Angle));
+		VertexY[i] = y + (r * sin(Angle));
 		Angle += (2 * PI) / VertexNum;
 	}
 
@@ -148,12 +148,12 @@ int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipV
 		NextVertex = i + (SkipVertexNum + 1);
 		if (NextVertex < VertexNum) {
 			//DrawLineAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr);
-			DrawLaserAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr, 4.0);
+			DrawLaserAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr, 6.0);
 		}
 		else {
 			NextVertex -= VertexNum;
 			//DrawLineAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr);
-			DrawLaserAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr, 4.0);
+			DrawLaserAA(VertexX[i], VertexY[i], VertexX[NextVertex], VertexY[NextVertex], Cr, 6.0);
 		}
 
 	}
