@@ -20,7 +20,6 @@ GetRainbowColor() : 色が滑らかに変化するプログラム
 #define MIN_VERTEX_NUM 3	// 正n角形の最低頂点数
 #define MAX_VERTEX_NUM 32	// 正n角形の最大頂点数
 #define MIN_SKIP_VERTEX_NUM 0	// 星型正n角形k点飛ばしの最小飛ばし数
-#define MAX_SKIP_VERTEX_NUM 16	// 星型正n角形k点飛ばしの最大飛ばし数
 
 // 関数プロトタイプ宣言
 int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipVertexNum);
@@ -33,7 +32,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 {
 	// スター描画関係
 	int VertexNum;
-	int SkipVertexNum;
+	int SkipVertexNum, MaxSkipVertexNum;;
 	int r;
 	float Angle;
 
@@ -87,7 +86,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				if (KeyBuf[KEY_INPUT_DOWN] == 1)
 				{
 					SkipVertexNum++;
-					if (SkipVertexNum > MAX_SKIP_VERTEX_NUM) SkipVertexNum = MAX_SKIP_VERTEX_NUM;
+					MaxSkipVertexNum = (VertexNum - 3) * 0.5;
+					if (SkipVertexNum > MaxSkipVertexNum) SkipVertexNum = MaxSkipVertexNum;
 					KeyHitCounter = 16;
 				}
 				else
@@ -127,14 +127,16 @@ int DrawStar(int x, int y, int r, double Angle, int Cr, int VertexNum, int SkipV
 
 	int i;
 	int NextVertex;
+	int MaxSkipVertexNum;
 	double VertexX[MAX_VERTEX_NUM];
 	double VertexY[MAX_VERTEX_NUM];
 
 	// 上限下限の設定
 	if (VertexNum < MIN_VERTEX_NUM) VertexNum = MIN_VERTEX_NUM;
 	if (VertexNum > MAX_VERTEX_NUM) VertexNum = MAX_VERTEX_NUM;
+	MaxSkipVertexNum = (VertexNum - 3) * 0.5;
 	if (SkipVertexNum < MIN_SKIP_VERTEX_NUM) SkipVertexNum = MIN_SKIP_VERTEX_NUM;
-	if (SkipVertexNum > MAX_SKIP_VERTEX_NUM) SkipVertexNum = MAX_SKIP_VERTEX_NUM;
+	if (SkipVertexNum > MaxSkipVertexNum) SkipVertexNum = MaxSkipVertexNum;
 	
 	// 正n角形の頂点座標を取得
 	for (i = 0; i < VertexNum; i++) {
